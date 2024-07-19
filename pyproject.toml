@@ -5,6 +5,7 @@ requires-python = ">= 3.11"
 dependencies = [
     "numpy==1.26.4",
     "opencv-python==4.9.0.80",
+    "pydantic==2.8.2",
 ]
 
 [project.optional-dependencies]
@@ -34,6 +35,3 @@ line_length = 120
 
 [tool.mypy]
 ignore_missing_imports = true
-
-[tool.isort]
-profile = "ruff"
