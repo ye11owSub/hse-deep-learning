@@ -1,6 +1,3 @@
 [submodule "src/hse_deep_learning/deep_sort"]
 	path = src/hse_deep_learning/deep_sort
 	url = git@github.com:nwojke/deep_sort.git
-[submodule "src/hse_deep_learning/deep-person-reid"]
-	path = src/hse_deep_learning/deep-person-reid
-	url = git@github.com:KaiyangZhou/deep-person-reid.git
