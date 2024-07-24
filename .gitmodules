@@ -1,3 +1,0 @@
-[submodule "src/hse_deep_learning/deep_sort"]
-	path = src/hse_deep_learning/deep_sort
-	url = git@github.com:nwojke/deep_sort.git

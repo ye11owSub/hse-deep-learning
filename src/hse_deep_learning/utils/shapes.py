@@ -17,6 +17,21 @@ class Rect(BaseModel):
     def bottom(self) -> float:
         return self.top + self.height - 1
 
+    @computed_field
+    @property
+    def center_x(self) -> float:
+        return self.left + self.width / 2
+
+    @computed_field
+    @property
+    def center_y(self) -> float:
+        return self.top + self.height / 2
+
+    @computed_field
+    @property
+    def aspect_ratio(self) -> float:
+        return self.width / self.height
+
     def resize(self, target_width: float, target_height: float) -> "Rect":
         target_aspect_ratio = target_width / target_height
 
