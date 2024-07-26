@@ -6,6 +6,7 @@ dependencies = [
     "numpy==1.26.4",
     "opencv-python==4.9.0.80",
     "pydantic==2.8.2",
+    "scikit-learn==1.5.1",
     "torch==2.3.1",
     "torchreid @ git+https://github.com/ye11owSub/deep-person-reid.git@adding_build_via_pyproject",
 ]
@@ -26,6 +27,12 @@ requires = [
     "setuptools_scm[toml]>=6.2"
 ]
 build-backend = "setuptools.build_meta"
+
+[project.scripts]
+deep-sort = "hse_deep_learning.cli:main"
+
+[tool.setuptools.package-data]
+share = ["share"]
 
 [tool.ruff]
 exclude = [".venv"]

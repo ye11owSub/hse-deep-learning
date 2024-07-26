@@ -4,16 +4,13 @@ from typing import List, Optional
 
 import cv2
 import numpy as np
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from hse_deep_learning.utils.shapes import Rect
 
 
 class GroundTruth:
     def __init__(self, ground_truth_file: str):
-        if not os.path.exists(ground_truth_file):
-            raise IOError
-
         self.raw_data = np.loadtxt(ground_truth_file, delimiter=",")
         self.frames_lookup: dict[int, dict[int, Rect]] = dict()
         self.tracks_lookup: dict[int, list[tuple[int, Rect]]] = dict()
@@ -44,6 +41,8 @@ class GroundTruth:
 
 
 class DatasetProcessor(BaseModel):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
     name: str
     images_files: List[str]
     ground_truth: Optional[GroundTruth]
@@ -52,23 +51,20 @@ class DatasetProcessor(BaseModel):
     update_rate: Optional[float]
 
 
-def load(sequence_directory: str) -> DatasetProcessor:
-    images_directory = Path(sequence_directory) / "img1"
+def load(sequence_directory_path: str) -> DatasetProcessor:
+    images_directory = Path(sequence_directory_path) / "img1"
     images_files = sorted([os.path.join(images_directory, file) for file in os.listdir(images_directory)])
-    ground_truth_file = Path(sequence_directory) / "gt" / "gt.txt"
+    ground_truth_file = Path(sequence_directory_path) / "gt" / "gt.txt"
 
     ground_truth = GroundTruth(str(ground_truth_file))
 
-    detection_file = os.path.join(sequence_directory, "det", "det.txt")
+    detection_file = os.path.join(sequence_directory_path, "det", "det.txt")
     detections = np.loadtxt(detection_file, delimiter=",")
 
-    if len(images_files) > 0:
-        image = cv2.imread(next(iter(images_files)), cv2.IMREAD_GRAYSCALE)
-        image_size = image.shape
-    else:
-        image_size = None
+    image = cv2.imread(images_files[0], cv2.IMREAD_GRAYSCALE)
+    image_size = image.shape
 
-    info_file = os.path.join(sequence_directory, "seqinfo.ini")
+    info_file = os.path.join(sequence_directory_path, "seqinfo.ini")
     if os.path.exists(info_file):
         with open(info_file, "r") as file:
             line_splits = [line.split("=") for line in file.read().splitlines()[1:]]
@@ -79,7 +75,7 @@ def load(sequence_directory: str) -> DatasetProcessor:
         update_ms = None
 
     return DatasetProcessor(
-        name=os.path.basename(sequence_directory),
+        name=os.path.basename(sequence_directory_path),
         images_files=images_files,
         ground_truth=ground_truth,
         detections=detections,
