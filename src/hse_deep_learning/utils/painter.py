@@ -129,6 +129,9 @@ class Painter:
 
     def draw_info(self, info: str):
         self.draw_label_with_bounding_box(
-            label=info, x=25, y=25, padding=5, brush=Brush(thickness=2, text_size=2, color=Color(red=0, green=0, blue=0)),
+            label=info,
+            x=25,
+            y=25,
+            padding=5,
+            brush=Brush(thickness=2, text_size=2, color=Color(red=0, green=0, blue=0)),
         )
-
