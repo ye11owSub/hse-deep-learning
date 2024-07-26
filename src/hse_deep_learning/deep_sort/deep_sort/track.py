@@ -111,6 +111,21 @@ class Track:
         ret[2:] = ret[:2] + ret[2:]
         return ret
 
+    @property
+    def bounding_box(self) -> Rect:
+        """Get bounding box for current track position.
+
+        Returns
+        -------
+        Rect
+            The bounding box.
+
+        """
+        bbox = self.mean[:4].copy()
+        bbox[2] *= bbox[3]
+        bbox[:2] -= bbox[2:] / 2
+        return Rect(left=bbox[0], top=bbox[1], width=bbox[2], height=bbox[3])
+
     def predict(self, kf):
         """Propagate the state distribution to the current time step using a
         Kalman filter prediction step.

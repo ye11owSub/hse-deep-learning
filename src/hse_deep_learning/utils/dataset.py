@@ -14,7 +14,7 @@ class GroundTruth:
         if not os.path.exists(ground_truth_file):
             raise IOError
 
-        self.raw_data = np.loadtxt(ground_truth_file, delimiter=',')
+        self.raw_data = np.loadtxt(ground_truth_file, delimiter=",")
         self.frames_lookup: dict[int, dict[int, Rect]] = dict()
         self.tracks_lookup: dict[int, list[tuple[int, Rect]]] = dict()
 
@@ -48,7 +48,7 @@ class DatasetProcessor(BaseModel):
     images_files: List[str]
     ground_truth: Optional[GroundTruth]
     detections: np.ndarray
-    image_size: Optional[np.ndarray]
+    image_size: np.ndarray
     update_rate: Optional[float]
 
 

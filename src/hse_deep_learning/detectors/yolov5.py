@@ -22,13 +22,11 @@ class YoloV5(DetectionsProvider):
         if not path.exists() or model_name not in self.MODELS_NAMES:
             raise IOError
 
-        self.model = torch.hub.load(
-            str(path), "custom", source="local", trust_repo=True, path=str(path / model_name)
-        )
+        self.model = torch.hub.load(str(path), "custom", source="local", trust_repo=True, path=str(path / model_name))
         self.model.to(self.device)
 
     def load_detections(self, image: np.ndarray, frame_id: int, min_height: int = 0) -> list[Detection]:
-        #print(frame_id)
+        # print(frame_id)
         results = self.model(image)
         detections = []
 
