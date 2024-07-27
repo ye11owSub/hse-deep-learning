@@ -4,11 +4,12 @@ from pathlib import Path
 
 import numpy as np
 import torch
+
 from hse_deep_learning.deep_sort.deep_sort.detection import Detection
 
 
 class DetectionsProvider(abc.ABC):
-    #MODELS_FOLDER = Path(files(__package__)) / "share" / "models"
+    MODELS_FOLDER = Path("share") / "models"
 
     @property
     def device(self) -> torch.device:

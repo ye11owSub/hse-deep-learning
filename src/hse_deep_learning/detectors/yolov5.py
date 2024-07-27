@@ -19,8 +19,6 @@ class YoloV5(DetectionsProvider):
 
     def __init__(self, model_name: str):
         path = self.MODELS_FOLDER / "yolov5"
-        if not path.exists() or model_name not in self.MODELS_NAMES:
-            raise IOError
 
         self.model = torch.hub.load(str(path), "custom", source="local", trust_repo=True, path=str(path / model_name))
         self.model.to(self.device)

@@ -48,7 +48,7 @@ class DatasetProcessor(BaseModel):
     ground_truth: Optional[GroundTruth]
     detections: np.ndarray
     image_size: np.ndarray
-    update_rate: Optional[float]
+    update_rate: float
 
 
 def load(sequence_directory_path: str) -> DatasetProcessor:
@@ -62,17 +62,14 @@ def load(sequence_directory_path: str) -> DatasetProcessor:
     detections = np.loadtxt(detection_file, delimiter=",")
 
     image = cv2.imread(images_files[0], cv2.IMREAD_GRAYSCALE)
-    image_size = image.shape
+    image_size = np.array(image.shape)
 
     info_file = os.path.join(sequence_directory_path, "seqinfo.ini")
-    if os.path.exists(info_file):
-        with open(info_file, "r") as file:
-            line_splits = [line.split("=") for line in file.read().splitlines()[1:]]
-            info_dict = dict(s for s in line_splits if isinstance(s, list) and len(s) == 2)
+    with open(info_file, "r") as file:
+        line_splits = [line.split("=") for line in file.read().splitlines()[1:]]
+        info_dict = dict(s for s in line_splits if isinstance(s, list) and len(s) == 2)
 
-        update_ms = 1000 / int(info_dict["frameRate"])
-    else:
-        update_ms = None
+    update_ms = 1000 / int(info_dict["frameRate"])
 
     return DatasetProcessor(
         name=os.path.basename(sequence_directory_path),

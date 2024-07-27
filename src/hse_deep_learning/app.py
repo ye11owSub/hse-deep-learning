@@ -55,9 +55,7 @@ class GroundTruthApp:
         self.title = dataset_descriptor.name
         self.dataset_descriptor = dataset_descriptor
         self.images = [cv2.imread(img, cv2.IMREAD_COLOR) for img in dataset_descriptor.images_files]
-        update_rate_ms = dataset_descriptor.update_rate
-        if update_rate_ms is None:
-            update_rate_ms = 5
+        self.update_rate_ms = dataset_descriptor.update_rate
 
         self.fps_records: list[float] = list()
 
@@ -77,4 +75,5 @@ class GroundTruthApp:
             tracks = ground_truth[frame_id]
             for track_id, bbox in tracks.items():
                 painter.draw_track(track_id, bbox)
-            cv2.imshow(self.title, cv2.resize(image, self.window_shape))
+            cv2.waitKey(int(self.update_rate_ms))
+            cv2.imshow(self.title, cv2.resize(painter.output_image, self.window_shape))

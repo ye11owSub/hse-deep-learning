@@ -29,7 +29,7 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [project.scripts]
-deep-sort = "hse_deep_learning.cli:main"
+deep-sort = "hse_deep_learning.cli.main:main"
 
 [tool.setuptools.package-data]
 share = ["share"]

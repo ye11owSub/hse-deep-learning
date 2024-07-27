@@ -103,8 +103,8 @@ class Painter:
 
         self.draw_label_with_bounding_box(
             label=str(track_id),
-            x=int(box.top),
-            y=int(box.left),
+            x=int(box.left),
+            y=int(box.top),
             padding=5,
             brush=Brush(thickness=2, text_size=1, color=track_color),
         )
