@@ -32,6 +32,11 @@ class Rect(BaseModel):
     def aspect_ratio(self) -> float:
         return self.width / self.height
 
+    @computed_field
+    @property
+    def area(self) -> float:
+        return self.width * self.height
+
     def resize(self, target_width: float, target_height: float) -> "Rect":
         target_aspect_ratio = target_width / target_height
 

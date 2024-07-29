@@ -18,9 +18,8 @@ class YoloV5(DetectionsProvider):
     }
 
     def __init__(self, model_name: str):
-        path = self.MODELS_FOLDER / "yolov5"
-
-        self.model = torch.hub.load(str(path), "custom", source="local", trust_repo=True, path=str(path / model_name))
+        self.model = torch.hub.load("ultralytics/yolov5", model_name)
+        # self.model = torch.hub.load(str(path), "custom", source="local", path=f"{model_name}.pt", force_reload=True)
         self.model.to(self.device)
 
     def load_detections(self, image: np.ndarray, frame_id: int, min_height: int = 0) -> list[Detection]:

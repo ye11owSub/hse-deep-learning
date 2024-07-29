@@ -56,6 +56,9 @@ def min_cost_matching(
     cost_matrix = distance_metric(tracks, detections, features, track_indices, detection_indices)
     cost_matrix[cost_matrix > max_distance] = max_distance + 1e-5
     indices = linear_assignment(cost_matrix)
+    indices = np.hstack(
+        [indices[0].reshape(((indices[0].shape[0]), 1)), indices[1].reshape(((indices[0].shape[0]), 1))]
+    )
 
     matches, unmatched_tracks, unmatched_detections = [], [], []
     for col, detection_idx in enumerate(detection_indices):
@@ -183,7 +186,12 @@ def gate_cost_matrix(
     """
     gating_dim = 2 if only_position else 4
     gating_threshold = kalman_filter.chi2inv95[gating_dim]
-    measurements = np.asarray([detections[i].to_xyah() for i in detection_indices])
+    measurements = np.asarray(
+        [
+            [detections[i].center_x, detections[i].center_y, detections[i].aspect_ratio, detections[i].height]
+            for i in detection_indices
+        ]
+    )
     for row, track_idx in enumerate(track_indices):
         track = tracks[track_idx]
         gating_distance = kf.gating_distance(track.mean, track.covariance, measurements, only_position)

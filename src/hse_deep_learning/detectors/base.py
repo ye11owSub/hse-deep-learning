@@ -1,5 +1,4 @@
 import abc
-from importlib.resources import files
 from pathlib import Path
 
 import numpy as np

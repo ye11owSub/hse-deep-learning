@@ -3,25 +3,24 @@ from pathlib import Path
 
 from hse_deep_learning.app import App, GroundTruthApp
 from hse_deep_learning.custom_deep_sort import CustomDeepSort
+from hse_deep_learning.detectors.yolov5 import YoloV5
 from hse_deep_learning.features_extractors.tourch_reid import TorchReidFeaturesExtractor
 from hse_deep_learning.utils.dataset import load
-from hse_deep_learning.detectors.yolov5 import YoloV5
 
 FEATURES_EXTRACTORS = {
-    "ftv1",
-    "torchreid_shufflenet",
-    "torchreid_mobilenet",
-    "torchreid_mobilenet14x",
-    "torchreid_mlfn",
-    "torchreid_osnet",
-    "torchreid_osnet075",
-    "torchreid_osnetibn",
-    "torchreid_osnetain",
-    "torchreid_osnetain075",
+    "shufflenet",
+    "mobilenetv2_x1_0",
+    "mobilenetv2_x1_4",
+    "mlfn",
+    "osnet_x1_0",
+    "osnet_x0_75",
+    "osnet_ibn_x1_0",
+    "osnet_ain_x1_0",
+    "osnet_ain_x0_75",
 }
 
 
-FEATURES_EXTRACTORS = {"yolov5n", "yolov5n6", "yolov5s", "yolov5m", "yolov5l"}
+DETECTORS = {"yolov5n", "yolov5n6", "yolov5s", "yolov5m", "yolov5l"}
 
 
 def parse_args():
@@ -39,7 +38,7 @@ def parse_args():
         "--detections_provider",
         help="Detections provider for finding human.",
         default=None,
-        choices=FEATURES_EXTRACTORS,
+        choices=DETECTORS,
         required=False,
     )
 
@@ -47,7 +46,7 @@ def parse_args():
         "-fe",
         "--features_extractor",
         help=f"Features extractor for ReID.",
-        default="tfv1",
+        default=None,
         choices=FEATURES_EXTRACTORS,
         required=False,
     )
@@ -70,7 +69,7 @@ def main():
             dataset = load(str(dataset_path))
             deep_sort = CustomDeepSort(
                 detections_provider=YoloV5(args.detections_provider),
-                features_extractor=TorchReidFeaturesExtractor(args.features_extractor)
+                features_extractor=TorchReidFeaturesExtractor(args.features_extractor),
             )
             app = App(dataset_descriptor=dataset, deep_sort=deep_sort)
             app.run()

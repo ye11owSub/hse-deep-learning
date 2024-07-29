@@ -110,17 +110,18 @@ class Tracker:
             features,
             confirmed_tracks,
         )
-
         # Associate remaining tracks together with unconfirmed tracks using IOU.
         iou_track_candidates = unconfirmed_tracks + [
             k for k in unmatched_tracks_a if self.tracks[k].time_since_update == 1
         ]
+
         unmatched_tracks_a = [k for k in unmatched_tracks_a if self.tracks[k].time_since_update != 1]
         matches_b, unmatched_tracks_b, unmatched_detections = linear_assignment.min_cost_matching(
             iou_matching.iou_cost,
             self.max_iou_distance,
             self.tracks,
             detections,
+            features,
             iou_track_candidates,
             unmatched_detections,
         )

@@ -20,10 +20,7 @@ class CustomDeepSort:
     def __init__(self, detections_provider: DetectionsProvider, features_extractor: TorchReidFeaturesExtractor):
         self.detections_provider = detections_provider
         self.features_extractor = features_extractor
-
-    @property
-    def tracker(self) -> Tracker:
-        return Tracker(
+        self.tracker = Tracker(
             metric=nn_matching.NearestNeighborDistanceMetric("cosine", 0.2),
             max_iou_distance=self.TRACKING_MAX_IOU_DISTANCE,
             max_age=self.TRACKING_MAX_AGE,
@@ -69,7 +66,12 @@ class CustomDeepSort:
         first_stage_results: list[Detection] = detections
 
         detections = [detection for detection in detections if detection.confidence >= self.DETECTION_MIN_CONFIDENCE]
-        bounding_boxes = np.array([list(detection.origin) for detection in detections])
+        bounding_boxes = np.array(
+            [
+                [detection.origin.left, detection.origin.top, detection.origin.width, detection.origin.height]
+                for detection in detections
+            ]
+        )
         confidence_scores = np.array([d.confidence for d in detections])
 
         indices = self.non_max_suppression(bounding_boxes, self.DETECTION_NMS_MAX_OVERLAP, confidence_scores)

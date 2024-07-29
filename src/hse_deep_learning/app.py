@@ -19,9 +19,7 @@ class App:
         self.deep_sort = deep_sort
         self.dataset_descriptor = dataset_descriptor
         self.images = [cv2.imread(img, cv2.IMREAD_COLOR) for img in dataset_descriptor.images_files]
-        update_rate_ms = dataset_descriptor.update_rate
-        if update_rate_ms is None:
-            update_rate_ms = 5
+        self.update_rate_ms = dataset_descriptor.update_rate
 
         self.fps_records: list[float] = list()
 
@@ -35,12 +33,13 @@ class App:
                 self.destroy_app()
                 return
 
+            painter = Painter(image)
             tracks, detections = self.deep_sort.update(frame_id, image)
 
-            painter = Painter(image)
             painter.draw_detections(detections)
             painter.draw_trackers(tracks)
-            cv2.imshow(self.title, cv2.resize(image, self.window_shape))
+            cv2.waitKey(int(self.update_rate_ms))
+            cv2.imshow(self.title, cv2.resize(painter.output_image, self.window_shape))
 
 
 class GroundTruthApp:
