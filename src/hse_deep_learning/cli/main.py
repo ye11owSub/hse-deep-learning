@@ -1,3 +1,4 @@
+import itertools
 from argparse import ArgumentParser
 from pathlib import Path
 
@@ -66,15 +67,17 @@ def main():
             app.run()
 
     elif args.cmd == "run":
-        for dataset_path in datasets.glob("*"):
-            dataset = load(str(dataset_path))
-            deep_sort = CustomDeepSort(
-                detections_provider=YoloV5(args.detections_provider),
-                features_extractor=TorchReidFeaturesExtractor(args.features_extractor),
-            )
-            metrics = Metrics(ground_truth=dataset.ground_truth)
-            app = App(dataset_descriptor=dataset, deep_sort=deep_sort, metrics=metrics)
-            app.run()
+        for detector, extractor in itertools.product(DETECTORS, FEATURES_EXTRACTORS):
+            print(f"\x1b[6;30;42m{detector}, {extractor}\x1b[0m")
+            for dataset_path in datasets.glob("*"):
+                dataset = load(str(dataset_path))
+                deep_sort = CustomDeepSort(
+                    detections_provider=YoloV5(detector),
+                    features_extractor=TorchReidFeaturesExtractor(extractor),
+                )
+                metrics = Metrics(ground_truth=dataset.ground_truth)
+                app = App(dataset_descriptor=dataset, deep_sort=deep_sort, metrics=metrics)
+                app.run()
 
 
 if __name__ == "__main__":

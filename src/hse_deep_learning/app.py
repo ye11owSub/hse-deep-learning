@@ -51,8 +51,9 @@ class App:
             #painter.draw_trackers(tracks)
             #cv2.waitKey(int(self.update_rate_ms))
             #cv2.imshow(self.title, cv2.resize(painter.output_image, self.window_shape))
-        (print(f"{k}:\t{v}") for k,v in self.metrics.evaluate())
-
+        print(f"\x1b[6;30;42m{self.dataset_descriptor.name}\x1b[0m")
+        for k,v in self.metrics.evaluate().items():
+            print(f"{k}:\t{v}")
 
 class GroundTruthApp:
     def __init__(
