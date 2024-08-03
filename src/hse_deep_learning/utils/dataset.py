@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from typing import List, Optional
+from typing import List
 
 import cv2
 import numpy as np
@@ -45,7 +45,7 @@ class DatasetProcessor(BaseModel):
 
     name: str
     images_files: List[str]
-    ground_truth: Optional[GroundTruth]
+    ground_truth: GroundTruth
     detections: np.ndarray
     image_size: np.ndarray
     update_rate: float

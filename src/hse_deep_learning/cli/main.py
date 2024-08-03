@@ -5,6 +5,7 @@ from hse_deep_learning.app import App, GroundTruthApp
 from hse_deep_learning.custom_deep_sort import CustomDeepSort
 from hse_deep_learning.detectors.yolov5 import YoloV5
 from hse_deep_learning.features_extractors.tourch_reid import TorchReidFeaturesExtractor
+from hse_deep_learning.metrics import Metrics
 from hse_deep_learning.utils.dataset import load
 
 FEATURES_EXTRACTORS = {
@@ -71,7 +72,8 @@ def main():
                 detections_provider=YoloV5(args.detections_provider),
                 features_extractor=TorchReidFeaturesExtractor(args.features_extractor),
             )
-            app = App(dataset_descriptor=dataset, deep_sort=deep_sort)
+            metrics = Metrics(ground_truth=dataset.ground_truth)
+            app = App(dataset_descriptor=dataset, deep_sort=deep_sort, metrics=metrics)
             app.run()
 
 
