@@ -5,10 +5,13 @@ requires-python = ">= 3.11"
 dependencies = [
     "numpy==1.26.4",
     "opencv-python==4.9.0.80",
+    "pandas==2.2.2",
     "pydantic==2.8.2",
     "scikit-learn==1.5.1",
     "torch==2.3.1",
+    "safetensors==0.4.3",
     "torchreid @ git+https://github.com/ye11owSub/deep-person-reid.git@adding_build_via_pyproject",
+    "ultralytics @ git+https://github.com/THU-MIG/yolov10.git",
 ]
 
 [project.optional-dependencies]

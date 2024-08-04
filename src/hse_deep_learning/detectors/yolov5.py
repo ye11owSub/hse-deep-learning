@@ -9,14 +9,6 @@ _LABEL_PERSON = 0
 
 
 class YoloV5(DetectionsProvider):
-    MODELS_NAMES = {
-        "yolov5l",
-        "yolov5m",
-        "yolov5n",
-        "yolov5n6",
-        "yolov5s",
-    }
-
     def __init__(self, model_name: str):
         self.model = torch.hub.load("ultralytics/yolov5", model_name)
         # self.model = torch.hub.load(str(path), "custom", source="local", path=f"{model_name}.pt", force_reload=True)

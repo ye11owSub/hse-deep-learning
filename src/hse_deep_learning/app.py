@@ -30,13 +30,13 @@ class App:
         cv2.destroyWindow(self.title)
         cv2.waitKey(1)
 
-    def run(self):
+    def run(self) -> None:
         for frame_id, image in enumerate(self.images):
             if image is None:
                 self.destroy_app()
                 return
 
-            #painter = Painter(image)
+            painter = Painter(image)
             tracks, detections = self.deep_sort.update(frame_id, image)
             self.metrics.update(
                 frame_id,
@@ -47,13 +47,11 @@ class App:
                 },
             )
 
-            #painter.draw_detections(detections)
-            #painter.draw_trackers(tracks)
-            #cv2.waitKey(int(self.update_rate_ms))
-            #cv2.imshow(self.title, cv2.resize(painter.output_image, self.window_shape))
-        print(f"\x1b[6;30;42m{self.dataset_descriptor.name}\x1b[0m")
-        for k,v in self.metrics.evaluate().items():
-            print(f"{k}:\t{v}")
+            painter.draw_detections(detections)
+            painter.draw_trackers(tracks)
+            cv2.waitKey(int(self.update_rate_ms))
+            cv2.imshow(self.title, cv2.resize(painter.output_image, self.window_shape))
+        print({self.dataset_descriptor.name: self.metrics.evaluate()})
 
 class GroundTruthApp:
     def __init__(
